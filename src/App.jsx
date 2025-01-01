@@ -1,17 +1,24 @@
-import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { BlogProvider } from './context/BlogContext';
-import AppRoutes from './routes';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import { RedirectToSignIn } from "@clerk/clerk-react";
+import Home from "./pages/Home";
+import AuthRoutes from "./components/AuthRoutes";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import CreateBlog from './components/CreateBlog';
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <AuthProvider>
-        <BlogProvider>
-          <AppRoutes />
-        </BlogProvider>
-      </AuthProvider>
-    </Router>
+    
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/protected" element={<RedirectToSignIn />} />
+      <Route path="/*" element={<AuthRoutes />} />
+      <Route path="/create-blog" element={<CreateBlog />} />
+     
+    </Routes>
+    
+
+
   );
 }
 

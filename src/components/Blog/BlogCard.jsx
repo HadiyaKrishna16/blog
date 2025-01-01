@@ -5,7 +5,7 @@ const BlogCard = ({ blog }) => {
   const { likeBlog, shareBlog } = useBlog();
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105">
       <img 
         src={blog.imageUrl} 
         alt={blog.title}
@@ -19,20 +19,16 @@ const BlogCard = ({ blog }) => {
             className="w-10 h-10 rounded-full mr-4"
           />
           <div>
-            <p className="font-semibold">{blog.author.name}</p>
+            <p className="font-semibold text-gray-800">{blog.author.name}</p>
             <p className="text-sm text-gray-600">{blog.readTime}</p>
           </div>
         </div>
         
         <Link to={`/blog/${blog.id}`}>
-          <h2 className="text-xl font-bold mb-2 hover:text-blue-600">
-            {blog.title}
-          </h2>
+          <h2 className="text-xl font-bold mb-2 hover:text-blue-600 transition">{blog.title}</h2>
         </Link>
         
-        <p className="text-gray-600 mb-4 line-clamp-3">
-          {blog.excerpt}
-        </p>
+        <p className="text-gray-600 mb-4 line-clamp-3">{blog.excerpt}</p>
         
         <div className="flex items-center justify-between">
           <span className="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded">

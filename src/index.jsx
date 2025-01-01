@@ -4,7 +4,7 @@ import { ClerkProvider } from '@clerk/clerk-react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
-const clerkFrontendApi = 'YOUR_CLERK_FRONTEND_API'; // Replace with your Clerk Frontend API
+const clerkFrontendApi = process.env.REACT_APP_CLERK_FRONTEND_API; // Ensure this is set in your .env file
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

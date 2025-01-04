@@ -102,7 +102,11 @@ export const BlogProvider = ({ children }) => {
   const likeBlog = (blogId) => {
     setBlogs(blogs.map(blog =>
       blog.id === blogId
-        ? { ...blog, likes: blog.isLiked ? blog.likes - 1 : blog.likes + 1, isLiked: !blog.isLiked }
+        ? {
+            ...blog,
+            likes: blog.isLiked ? blog.likes - 1 : blog.likes + 1,
+            isLiked: !blog.isLiked
+          }
         : blog
     ));
   };

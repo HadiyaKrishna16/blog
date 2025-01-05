@@ -145,11 +145,11 @@ const CreateBlog = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="container mx-auto p-4 md:p-8 max-w-6xl relative z-10"
+        className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl relative z-10"
       >
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white">
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-12 md:p-16 relative overflow-hidden">
+          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6 sm:p-8 lg:p-12 relative overflow-hidden">
             <div className="absolute inset-0 bg-grid opacity-25"></div>
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent"></div>
             
@@ -158,24 +158,24 @@ const CreateBlog = () => {
               animate={{ opacity: 1, y: 0 }}
               className="relative z-10 max-w-2xl mx-auto text-center"
             >
-              <h1 className="text-5xl font-bold text-white mb-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
                 Create Your Story
               </h1>
-              <p className="text-xl text-indigo-100 leading-relaxed">
+              <p className="text-base sm:text-lg text-indigo-100 leading-relaxed">
                 Share your insights and inspire others with your unique perspective
               </p>
             </motion.div>
           </div>
 
           {/* Form */}
-          <div className="p-8 md:p-12 lg:p-16">
+          <div className="p-4 sm:p-6 lg:p-8">
             <AnimatePresence>
               {error && (
                 <motion.div 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="mb-8 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl flex justify-between items-start"
+                  className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-xl flex justify-between items-start"
                 >
                   <div>
                     <p className="font-medium">Error</p>
@@ -191,15 +191,15 @@ const CreateBlog = () => {
               )}
             </AnimatePresence>
 
-            <form onSubmit={handleSubmit} className="space-y-10">
-              <div className="grid md:grid-cols-2 gap-8">
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Title Input */}
                 <motion.div 
-                  className="form-group col-span-2"
+                  className="form-group md:col-span-2"
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-3">
+                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-2">
                     <FaHeading className="mr-2 text-indigo-600" />
                     Title
                   </label>
@@ -208,7 +208,7 @@ const CreateBlog = () => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-6 py-4 rounded-2xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-lg"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-base sm:text-lg"
                     placeholder="Enter an engaging title..."
                     required
                   />
@@ -216,11 +216,11 @@ const CreateBlog = () => {
 
                 {/* Category Input */}
                 <motion.div 
-                  className="form-group"
+                  className="form-group md:col-span-2"
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-3">
+                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-2">
                     <FaTags className="mr-2 text-indigo-600" />
                     Category
                   </label>
@@ -228,7 +228,7 @@ const CreateBlog = () => {
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    className="w-full px-6 py-4 rounded-2xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 bg-white text-lg appearance-none"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 bg-white text-base sm:text-lg appearance-none"
                     required
                   >
                     <option value="">Select a category</option>
@@ -240,17 +240,16 @@ const CreateBlog = () => {
                   </select>
                 </motion.div>
 
-                {/* Image Upload Input */}
+                {/* Image Upload */}
                 <motion.div 
-                  className="form-group col-span-2"
+                  className="form-group md:col-span-2"
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-3">
+                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-2">
                     <FaImage className="mr-2 text-indigo-600" />
-                    Image
+                    Cover Image
                   </label>
-                  
                   <div className="relative">
                     <input
                       type="file"
@@ -261,11 +260,11 @@ const CreateBlog = () => {
                     />
                     <label
                       htmlFor="image-upload"
-                      className="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-gray-300 hover:border-indigo-500 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100"
+                      className="w-full px-4 sm:px-6 py-8 rounded-xl border-2 border-dashed border-gray-300 hover:border-indigo-500 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
-                      <FaUpload className="text-4xl text-gray-400 mb-2" />
-                      <span className="text-gray-600">Click to upload image</span>
-                      <span className="text-sm text-gray-500 mt-1">Max size: 5MB</span>
+                      <FaUpload className="text-3xl sm:text-4xl text-gray-400 mb-2" />
+                      <span className="text-gray-600 text-sm sm:text-base">Click to upload image</span>
+                      <span className="text-xs sm:text-sm text-gray-500 mt-1">Max size: 5MB</span>
                     </label>
                   </div>
 
@@ -276,21 +275,19 @@ const CreateBlog = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="mt-4 rounded-2xl overflow-hidden shadow-xl bg-gray-100 aspect-video relative group"
+                        className="mt-4 rounded-xl overflow-hidden shadow-xl bg-gray-100 aspect-video relative group"
                       >
                         <img
                           src={imagePreview}
                           alt="Preview"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        
                         <button
                           onClick={() => {
                             setSelectedImage(null);
                             setImagePreview(null);
                           }}
-                          className="absolute top-4 right-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
+                          className="absolute top-2 right-2 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
                         >
                           <FaTimes className="text-gray-600" />
                         </button>
@@ -301,11 +298,11 @@ const CreateBlog = () => {
 
                 {/* Excerpt Input */}
                 <motion.div 
-                  className="form-group col-span-2"
+                  className="form-group md:col-span-2"
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-3">
+                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-2">
                     <FaQuoteLeft className="mr-2 text-indigo-600" />
                     Excerpt
                   </label>
@@ -313,7 +310,7 @@ const CreateBlog = () => {
                     name="excerpt"
                     value={formData.excerpt}
                     onChange={handleChange}
-                    className="w-full px-6 py-4 rounded-2xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-lg"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-base sm:text-lg"
                     placeholder="Write a compelling summary..."
                     rows="3"
                     required
@@ -322,11 +319,11 @@ const CreateBlog = () => {
 
                 {/* Content Input */}
                 <motion.div 
-                  className="form-group col-span-2"
+                  className="form-group md:col-span-2"
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-3">
+                  <label className="flex items-center text-gray-700 text-sm font-semibold mb-2">
                     <FaFileAlt className="mr-2 text-indigo-600" />
                     Content
                   </label>
@@ -334,7 +331,7 @@ const CreateBlog = () => {
                     name="content"
                     value={formData.content}
                     onChange={handleChange}
-                    className="w-full px-6 py-4 rounded-2xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-lg"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-base sm:text-lg"
                     placeholder="Tell your story..."
                     rows="8"
                     required
@@ -343,13 +340,13 @@ const CreateBlog = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end space-x-4 pt-6">
+              <div className="flex flex-col sm:flex-row items-center justify-end space-y-4 sm:space-y-0 sm:space-x-4 mt-8">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="button"
                   onClick={() => navigate('/')}
-                  className="px-8 py-4 rounded-2xl text-gray-600 hover:bg-gray-100 transition-colors duration-300 text-lg font-medium"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors duration-300 text-base sm:text-lg font-medium"
                 >
                   Cancel
                 </motion.button>
@@ -358,7 +355,7 @@ const CreateBlog = () => {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="px-10 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-2xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 focus:ring-4 focus:ring-purple-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center shadow-lg shadow-purple-500/25 text-lg font-medium"
+                  className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 focus:ring-4 focus:ring-purple-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-purple-500/25 text-base sm:text-lg font-medium"
                 >
                   {loading ? (
                     <>

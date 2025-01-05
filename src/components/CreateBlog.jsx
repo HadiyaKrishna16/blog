@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import LoadingSpinner from "../components/common/LoadingSpinner.jsx";
 import { useBlog } from "../context/BlogContext";
 import Navbar from "./Navbar";
-import { FaImage, FaHeading, FaTags, FaFileAlt, FaQuoteLeft, FaTimes, FaMagic } from "react-icons/fa";
+import { FaImage, FaHeading, FaTags, FaFileAlt, FaQuoteLeft, FaTimes, FaMagic, FaUpload } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 
@@ -20,10 +20,11 @@ const CreateBlog = () => {
   const [formData, setFormData] = useState({
     title: "",
     category: "",
-    imageUrl: "",
     content: "",
     excerpt: "",
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -37,14 +38,48 @@ const CreateBlog = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const resetForm = () => {
-    setFormData({
-      title: "",
-      category: "",
-      imageUrl: "",
-      content: "",
-      excerpt: "",
-    });
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        setError("Image size should be less than 5MB");
+        return;
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        setError("Please upload an image file");
+        return;
+      }
+
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async (file) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `blog-images/${fileName}`;
+
+      const { error: uploadError, data } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      throw new Error('Error uploading image: ' + error.message);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,14 +88,17 @@ const CreateBlog = () => {
     setLoading(true);
 
     try {
-      const { title, category, imageUrl, content, excerpt } = formData;
+      const { title, category, content, excerpt } = formData;
 
-      if (!title || !category || !imageUrl || !content || !excerpt) {
+      if (!title || !category || !selectedImage || !content || !excerpt) {
         throw new Error("All fields are required.");
       }
 
+      // Upload image first
+      const imageUrl = await uploadImage(selectedImage);
+
       const newBlog = {
-        id: Date.now(), // temporary ID for demo
+        id: Date.now(),
         title,
         category,
         imageUrl,
@@ -89,10 +127,8 @@ const CreateBlog = () => {
 
       if (supabaseError) throw new Error(supabaseError.message);
 
-      // Add to BlogContext
       addBlog(newBlog);
-      resetForm();
-      navigate('/'); // Redirect to home page
+      navigate('/');
 
     } catch (err) {
       setError(err.message || "Unexpected error occurred. Please try again.");
@@ -204,46 +240,64 @@ const CreateBlog = () => {
                   </select>
                 </motion.div>
 
-                {/* Image URL Input */}
+                {/* Image Upload Input */}
                 <motion.div 
-                  className="form-group"
+                  className="form-group col-span-2"
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <label className="flex items-center text-gray-700 text-sm font-semibold mb-3">
                     <FaImage className="mr-2 text-indigo-600" />
-                    Cover Image URL
+                    Image
                   </label>
-                  <input
-                    type="url"
-                    name="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={handleChange}
-                    className="w-full px-6 py-4 rounded-2xl border border-gray-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-300 text-lg"
-                    placeholder="Paste your image URL here..."
-                    required
-                  />
-                </motion.div>
-
-                {/* Image Preview */}
-                <AnimatePresence>
-                  {formData.imageUrl && (
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      className="col-span-2 rounded-3xl overflow-hidden shadow-xl bg-gray-100 aspect-video relative group"
+                  
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className="w-full px-6 py-4 rounded-2xl border-2 border-dashed border-gray-300 hover:border-indigo-500 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100"
                     >
-                      <img
-                        src={formData.imageUrl}
-                        alt="Preview"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        onError={(e) => e.target.src = 'placeholder-image-url.jpg'}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      <FaUpload className="text-4xl text-gray-400 mb-2" />
+                      <span className="text-gray-600">Click to upload image</span>
+                      <span className="text-sm text-gray-500 mt-1">Max size: 5MB</span>
+                    </label>
+                  </div>
+
+                  {/* Image Preview */}
+                  <AnimatePresence>
+                    {imagePreview && (
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="mt-4 rounded-2xl overflow-hidden shadow-xl bg-gray-100 aspect-video relative group"
+                      >
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        <button
+                          onClick={() => {
+                            setSelectedImage(null);
+                            setImagePreview(null);
+                          }}
+                          className="absolute top-4 right-4 p-2 bg-white/80 rounded-full hover:bg-white transition-colors"
+                        >
+                          <FaTimes className="text-gray-600" />
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
 
                 {/* Excerpt Input */}
                 <motion.div 

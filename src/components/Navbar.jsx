@@ -45,11 +45,21 @@ const Navbar = () => {
             <motion.div 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 p-2 rounded-xl shadow-lg"
+              className={`p-2 rounded-xl shadow-lg transition-all duration-300 ${
+                isScrolled 
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600'
+                  : 'bg-white'
+              }`}
             >
-              <FaBook className="text-white text-xl" />
+              <FaBook className={`text-xl transition-colors duration-300 ${
+                isScrolled ? 'text-white' : 'text-indigo-600'
+              }`} />
             </motion.div>
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text">
+            <span className={`text-xl font-bold transition-all duration-300 ${
+              isScrolled 
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text'
+                : 'text-white'
+            }`}>
               Blog
             </span>
           </Link>
